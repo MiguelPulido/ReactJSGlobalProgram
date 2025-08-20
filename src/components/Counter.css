@@ -1,0 +1,17 @@
+.counter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+.increment-button {
+    background-color: green;
+    color: white;
+}
+
+.decrement-button {
+    background-color: red;
+    color: white;
+}
