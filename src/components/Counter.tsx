@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './counter.css';
+import './Counter.css';
 
 
 interface CounterProps {
