@@ -1,0 +1,10 @@
+{
+    "genres": [
+        "All",
+        "Documentary",
+        "Comedy",
+        "Horror",
+        "Crime"
+    ],
+    "selectedGenre": "All"
+}
