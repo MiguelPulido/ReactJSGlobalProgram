@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import GenreSelect from './GenreSelect';
+import GenreSelect from "./GenreSelect";
 
 const meta = {
   component: GenreSelect,
@@ -12,8 +12,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    genres: [],
-    selectedGenre: "selectedGenre",
-    onSelect: () => {}
-  }
+    genres: ["All", "Documentary", "Comedy", "Horror", "Crime"],
+    selectedGenre: "All",
+    onSelect: () => {},
+  },
 };
