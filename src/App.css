@@ -4,9 +4,3 @@
   padding: 32px;
   text-align: center;
 }
-.app-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 100px;
-}
