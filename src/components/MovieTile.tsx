@@ -55,10 +55,7 @@ export const MovieTile = ({
         />
       )}
       {!movie.imageUrl && (
-        <div
-          className="card-img-top bg-light d-flex align-items-center justify-content-center"
-          style={{ height: "300px" }}
-        >
+        <div className="card-img-top bg-light d-flex align-items-center justify-content-center min-vh-25">
           <span className="text-muted">No Image</span>
         </div>
       )}
@@ -83,7 +80,7 @@ export const MovieTile = ({
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <span style={{ fontSize: "1.5rem", lineHeight: 1 }}>⋯</span>
+          <span className="fs-4 lh-1">⋯</span>
         </button>
         <ul className="dropdown-menu dropdown-menu-end">
           <li>

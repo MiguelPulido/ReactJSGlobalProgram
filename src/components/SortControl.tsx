@@ -18,8 +18,7 @@ export const SortControl = ({
     <div className="d-flex align-items-center gap-2" data-testid="sort-control">
       <label className="form-label mb-0 fw-medium">Sort by:</label>
       <select
-        className="form-select form-select-sm"
-        style={{ width: "auto", minWidth: "150px" }}
+        className="form-select form-select-sm w-auto min-w-150"
         value={currentSort}
         onChange={handleSortChange}
         data-testid="sort-select"

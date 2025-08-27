@@ -30,8 +30,7 @@ export const MovieDetails = ({ movie, onClose }: MovieDetailsProps) => {
           )}
           {!movie.imageUrl && (
             <div
-              className="bg-light d-flex align-items-center justify-content-center rounded shadow"
-              style={{ height: "400px", width: "100%" }}
+              className="bg-light d-flex align-items-center justify-content-center rounded shadow min-vh-50"
               data-testid="movie-poster-placeholder"
             >
               <span className="text-muted">No Image</span>
