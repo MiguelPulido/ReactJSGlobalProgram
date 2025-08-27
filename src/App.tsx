@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import SearchForm from "./components/SearchForm";
 import GenreSelect from "./components/GenreSelect";
 import Counter from "./components/Counter";
 import MovieDetails from "./components/MovieDetails";
+import SortControl, { type SortOption } from "./components/SortControl";
 import type { Movie } from "./types/movie";
 import "./App.css";
 import MoviesList from "./components/MovieList";
@@ -32,7 +33,7 @@ const MOCK_MOVIES: Movie[] = [
     rating: 9.2,
     description:
       "Princess Fiona's parents invite her and Shrek to dinner to celebrate her marriage. If only they knew the newlyweds were both ogres.",
-    releaseDate: new Date("1972-03-24"),
+    releaseDate: new Date("2006-03-24"),
     durationInMinutes: 175,
   },
   {
@@ -54,20 +55,33 @@ function App() {
   const [selectedGenre, setSelectedGenre] =
     useState<string>(DEFAULT_MOVIE_GENRE);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [sortBy, setSortBy] = useState<SortOption>("Release Date");
+
+  const sortedMovies = useMemo(() => {
+    const moviesCopy = [...MOCK_MOVIES];
+    return moviesCopy.sort((a, b) => {
+      if (sortBy === "Title") {
+        return a.title.localeCompare(b.title);
+      } else {
+        return b.releaseDate.getTime() - a.releaseDate.getTime();
+      }
+    });
+  }, [sortBy]);
 
   const handleSearch = (searchText: string): void => {
     setLastSearchText(searchText);
-    console.log("Search performed:", searchText);
   };
 
   const handleGenreSelect = (genre: string): void => {
     setSelectedGenre(genre);
-    console.log("Genre selected:", genre);
+  };
+
+  const handleSortChange = (sortOption: SortOption): void => {
+    setSortBy(sortOption);
   };
 
   const handleMovieSelect = (movie: Movie): void => {
     setSelectedMovie(movie);
-    console.log("Movie selected:", movie.title);
   };
 
   const handleMovieDetailsClose = (): void => {
@@ -115,8 +129,14 @@ function App() {
           </section>
 
           <section className="w-100">
+            <div className="d-flex mb-4">
+              <SortControl
+                currentSort={sortBy}
+                onSortChange={handleSortChange}
+              />
+            </div>
             <MoviesList
-              movies={MOCK_MOVIES}
+              movies={sortedMovies}
               onMovieClick={handleMovieSelect}
               onMovieEdit={handleMovieEdit}
               onMovieDelete={handleMovieDelete}
