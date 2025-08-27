@@ -2,6 +2,7 @@ import { useState } from "react";
 import SearchForm from "./components/SearchForm";
 import GenreSelect from "./components/GenreSelect";
 import Counter from "./components/Counter";
+import MovieDetails from "./components/MovieDetails";
 import type { Movie } from "./types/movie";
 import "./App.css";
 import MoviesList from "./components/MovieList";
@@ -52,6 +53,7 @@ function App() {
   const [lastSearchText, setLastSearchText] = useState<string>("");
   const [selectedGenre, setSelectedGenre] =
     useState<string>(DEFAULT_MOVIE_GENRE);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   const handleSearch = (searchText: string): void => {
     setLastSearchText(searchText);
@@ -63,38 +65,65 @@ function App() {
     console.log("Genre selected:", genre);
   };
 
+  const handleMovieSelect = (movie: Movie): void => {
+    setSelectedMovie(movie);
+    console.log("Movie selected:", movie.title);
+  };
+
+  const handleMovieDetailsClose = (): void => {
+    setSelectedMovie(null);
+  };
+
+  const handleMovieEdit = (movie: Movie): void => {
+    console.log("Edit movie:", movie.title);
+  };
+
+  const handleMovieDelete = (movie: Movie): void => {
+    console.log("Delete movie:", movie.title);
+  };
+
   return (
     <div className="container-fluid d-flex flex-column align-items-center gap-5 py-4">
-      <section className="w-100 text-center">
-        <Counter initialValue={3} />
-      </section>
+      {selectedMovie ? (
+        <MovieDetails movie={selectedMovie} onClose={handleMovieDetailsClose} />
+      ) : (
+        <>
+          <section className="w-100 text-center">
+            <Counter initialValue={3} />
+          </section>
 
-      <section className="w-100 text-center">
-        <SearchForm initialSearchText="Test text" onSearch={handleSearch} />
-        {!!lastSearchText && (
-          <div className="mt-2">
-            <strong>Last Search:</strong> "{lastSearchText}"
-          </div>
-        )}
-      </section>
+          <section className="w-100 text-center">
+            <SearchForm initialSearchText="Test text" onSearch={handleSearch} />
+            {!!lastSearchText && (
+              <div className="mt-2">
+                <strong>Last Search:</strong> "{lastSearchText}"
+              </div>
+            )}
+          </section>
 
-      <section className="w-100 text-center">
-        <GenreSelect
-          genres={MOVIE_GENRES}
-          selectedGenre={selectedGenre}
-          onSelect={handleGenreSelect}
-        />
-        {!!selectedGenre && (
-          <div className="mt-2">
-            <strong>Selected:</strong> "{selectedGenre}"
-          </div>
-        )}
-      </section>
+          <section className="w-100 text-center">
+            <GenreSelect
+              genres={MOVIE_GENRES}
+              selectedGenre={selectedGenre}
+              onSelect={handleGenreSelect}
+            />
+            {!!selectedGenre && (
+              <div className="mt-2">
+                <strong>Selected:</strong> "{selectedGenre}"
+              </div>
+            )}
+          </section>
 
-      <section className="w-100">
-        <h2 className="text-center mb-4">Movie Gallery</h2>
-        <MoviesList movies={MOCK_MOVIES} />
-      </section>
+          <section className="w-100">
+            <MoviesList
+              movies={MOCK_MOVIES}
+              onMovieClick={handleMovieSelect}
+              onMovieEdit={handleMovieEdit}
+              onMovieDelete={handleMovieDelete}
+            />
+          </section>
+        </>
+      )}
     </div>
   );
 }
