@@ -7,15 +7,6 @@ export interface MovieTileProps {
   onClick?: (movie: Movie) => void;
 }
 
-export interface ContextMenuProps {
-  isVisible: boolean;
-  x: number;
-  y: number;
-  onEdit: () => void;
-  onDelete: () => void;
-  onClose: () => void;
-}
-
 export const MovieTile = ({
   movie,
   onEdit,
