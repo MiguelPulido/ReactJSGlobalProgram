@@ -53,7 +53,11 @@ export const MovieTile = ({
 
       <div className="card-body p-3">
         <div className="d-flex align-items-center justify-content-between text-muted small mb-1">
-          <h5 className="card-title text-truncate mb-2" title={movie.title}>
+          <h5
+            className="card-title text-truncate mb-2"
+            title={movie.title}
+            data-testid={`movie-tile-title-${movie.id}`}
+          >
             {movie.title}
           </h5>
           <span className="fw-medium">{movie.release_date.getFullYear()}</span>

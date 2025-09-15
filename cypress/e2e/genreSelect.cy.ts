@@ -1,10 +1,8 @@
+import { getByTestId } from "./utils";
+
 class GenreSelectData{
     genres: string[];
     selectedGenre: string;
-}
-
-function getByTestId(selector: string): Cypress.Chainable<JQuery<HTMLElement>> {
-    return cy.get(`[data-testid=${selector}]`);
 }
 
 describe('GenreSelect Component E2E Tests', () => {
@@ -59,4 +57,17 @@ describe('GenreSelect Component E2E Tests', () => {
         .should('have.class', 'genre-button')
         .should('not.have.class', 'genre-button-selected')
   })
+
+  it('should update the URL with the selected genre filter', () => {
+    const genreToSelect = genreData.genres[2];
+    getByTestId(`genre-button-${genreToSelect.toLowerCase()}`).click();
+    cy.url().should('include', `genre=${genreToSelect.toLowerCase()}`);
+  });
+
+  it('should select the correct genre button when navigating directly to a genre in the URL', () => {
+    const genreToSelect = genreData.genres[2];
+    cy.visit(`/?genre=${genreToSelect.toLowerCase()}`);
+    getByTestId(`genre-button-${genreToSelect.toLowerCase()}`)
+      .should('have.class', 'genre-button-selected');
+  });
 })

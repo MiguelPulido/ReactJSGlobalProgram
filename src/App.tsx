@@ -1,8 +1,8 @@
+import { Outlet } from "react-router-dom";
 import "./App.css";
-import MovieListPage from "./components/movieListPage/MovieListPage";
 
 function App() {
-  return <MovieListPage />;
+  return <Outlet />;
 }
 
 export default App;
