@@ -4,7 +4,7 @@ import MovieDetails from "../MovieDetails";
 import type { Movie } from "../../../types/movie";
 
 const mockMovie: Movie = {
-  id: "1",
+  id: 1,
   title: "Test Movie",
   genres: ["Action", "Comedy"],
   poster_path: "https://example.com/poster.jpg",
@@ -15,7 +15,7 @@ const mockMovie: Movie = {
 };
 
 const mockMovieMissingImageAndGenres: Movie = {
-  id: "2",
+  id: 2,
   title: "Missing Data Movie",
   genres: [],
   poster_path: "",
@@ -26,7 +26,7 @@ const mockMovieMissingImageAndGenres: Movie = {
 };
 
 const mockMovieLongDuration: Movie = {
-  id: "3",
+  id: 3,
   title: "Epic Movie",
   genres: ["Drama", "Adventure", "Fantasy"],
   poster_path: "https://example.com/epic.jpg",
