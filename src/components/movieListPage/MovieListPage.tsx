@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchForm from "../searchForm/SearchForm";
 import GenreSelect from "../genreSelect/GenreSelect";
-import MovieDetails from "../movieDetails/MovieDetails";
 import { type MovieFormData } from "../movieForm/MovieForm";
 import {
   mapMovie,
@@ -14,6 +14,7 @@ import MoviesList from "../movieList/MovieList";
 import {
   AVAILABLE_FORM_GENRES,
   DEFAULT_MOVIE_GENRE,
+  DEFAULT_SORT,
   MOVIE_GENRES,
   MOVIES_API_URL,
 } from "../../constants/movie";
@@ -21,13 +22,27 @@ import SortControl from "../sortControl/SortControl";
 import "./MovieListPage.css";
 import MovieDialog from "../movieDialog/MovieDialog";
 
+const toTitleCase = (str: string): string => {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
 const MovieListPage = () => {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const searchText = (searchParams.get("query") ?? "").toLowerCase();
+  const selectedGenre = searchParams.get("genre")
+    ? toTitleCase(searchParams.get("genre") as string)
+    : DEFAULT_MOVIE_GENRE;
+  const sortBy = searchParams.get("sort")
+    ? toTitleCase(searchParams.get("sort") as string)
+    : DEFAULT_SORT;
+
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [searchText, setSearchText] = useState<string>("");
-  const [selectedGenre, setSelectedGenre] =
-    useState<string>(DEFAULT_MOVIE_GENRE);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [sortBy, setSortBy] = useState<SortOption>(MovieSort.RELEASE_DATE);
   const [dialogType, setDialogType] = useState<MovieDialogType | null>(null);
 
   useEffect(() => {
@@ -68,24 +83,40 @@ const MovieListPage = () => {
     return () => controller.abort();
   }, [sortBy, searchText, selectedGenre]);
 
-  const handleSearch = (searchText: string): void => {
-    setSearchText(searchText);
+  const handleSearch = (query: string): void => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (query) {
+        params.set("query", query);
+      } else {
+        params.delete("query");
+      }
+      return params;
+    });
   };
 
   const handleGenreSelect = (genre: string): void => {
-    setSelectedGenre(genre);
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (genre) {
+        params.set("genre", genre.toLowerCase());
+      } else {
+        params.delete("genre");
+      }
+      return params;
+    });
   };
 
   const handleSortChange = (sortOption: SortOption): void => {
-    setSortBy(sortOption);
-  };
-
-  const handleMovieSelect = (movie: Movie): void => {
-    setSelectedMovie(movie);
-  };
-
-  const handleMovieDetailsClose = (): void => {
-    setSelectedMovie(null);
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (sortOption) {
+        params.set("sort", sortOption.toLowerCase());
+      } else {
+        params.delete("sort");
+      }
+      return params;
+    });
   };
 
   const handleOpenMovieDialog = (
@@ -138,59 +169,42 @@ const MovieListPage = () => {
   return (
     <>
       <div className="container-fluid d-flex flex-column align-items-center gap-5 py-4">
-        {!dialogType && selectedMovie ? (
-          <MovieDetails
-            movie={selectedMovie}
-            onClose={handleMovieDetailsClose}
+        <section className="w-100 container">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h1>FIND YOUR MOVIE</h1>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ color: "var(--bs-secondary)" }}
+              onClick={() => handleOpenMovieDialog(MovieDialogType.ADD, null)}
+            >
+              + Add Movie
+            </button>
+          </div>
+
+          <SearchForm initialSearchText={searchText} onSearch={handleSearch} />
+        </section>
+
+        <section className="w-100 container">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <GenreSelect
+              genres={MOVIE_GENRES}
+              selectedGenre={selectedGenre}
+              onSelect={handleGenreSelect}
+            />
+            <SortControl currentSort={sortBy} onSortChange={handleSortChange} />
+          </div>
+          <MoviesList
+            movies={movies}
+            onMovieClick={(movie) => navigate(`/${movie.id}`)}
+            onMovieEdit={(movie) =>
+              handleOpenMovieDialog(MovieDialogType.EDIT, movie)
+            }
+            onMovieDelete={(movie) =>
+              handleOpenMovieDialog(MovieDialogType.DELETE, movie)
+            }
           />
-        ) : (
-          <>
-            <section className="w-100 container">
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1>FIND YOUR MOVIE</h1>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  style={{ color: "var(--bs-secondary)" }}
-                  onClick={() =>
-                    handleOpenMovieDialog(MovieDialogType.ADD, null)
-                  }
-                >
-                  + Add Movie
-                </button>
-              </div>
-
-              <SearchForm
-                initialSearchText={searchText}
-                onSearch={handleSearch}
-              />
-            </section>
-
-            <section className="w-100 container">
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <GenreSelect
-                  genres={MOVIE_GENRES}
-                  selectedGenre={selectedGenre}
-                  onSelect={handleGenreSelect}
-                />
-                <SortControl
-                  currentSort={sortBy}
-                  onSortChange={handleSortChange}
-                />
-              </div>
-              <MoviesList
-                movies={movies}
-                onMovieClick={handleMovieSelect}
-                onMovieEdit={(movie) =>
-                  handleOpenMovieDialog(MovieDialogType.EDIT, movie)
-                }
-                onMovieDelete={(movie) =>
-                  handleOpenMovieDialog(MovieDialogType.DELETE, movie)
-                }
-              />
-            </section>
-          </>
-        )}
+        </section>
       </div>
 
       <MovieDialog

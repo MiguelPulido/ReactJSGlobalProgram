@@ -14,7 +14,7 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const MOCK_GENRES = [
+const GENRES = [
   "Action",
   "Comedy",
   "Drama",
@@ -49,7 +49,7 @@ export const AddMode: Story = {
   args: {
     onSubmit: handleSubmit,
     onCancel: handleCancel,
-    availableGenres: MOCK_GENRES,
+    availableGenres: GENRES,
   },
 };
 
@@ -58,7 +58,7 @@ export const EditMode: Story = {
     onSubmit: handleSubmit,
     onCancel: handleCancel,
     initialMovie: MOVIE,
-    availableGenres: MOCK_GENRES,
+    availableGenres: GENRES,
   },
 };
 
@@ -73,6 +73,6 @@ export const CustomGenres: Story = {
 export const WithoutCancel: Story = {
   args: {
     onSubmit: handleSubmit,
-    availableGenres: MOCK_GENRES,
+    availableGenres: GENRES,
   },
 };
