@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 import SearchForm from "../searchForm/SearchForm";
 import GenreSelect from "../genreSelect/GenreSelect";
 import { type MovieFormData } from "../movieForm/MovieForm";
@@ -31,6 +36,7 @@ const toTitleCase = (str: string): string => {
 
 const MovieListPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const searchText = (searchParams.get("query") ?? "").toLowerCase();
@@ -46,6 +52,10 @@ const MovieListPage = () => {
   const [dialogType, setDialogType] = useState<MovieDialogType | null>(null);
 
   useEffect(() => {
+    if (location.pathname !== "/") {
+      return;
+    }
+
     const controller = new AbortController();
     const fetchMovies = async () => {
       try {
@@ -81,7 +91,7 @@ const MovieListPage = () => {
 
     fetchMovies();
     return () => controller.abort();
-  }, [sortBy, searchText, selectedGenre]);
+  }, [sortBy, searchText, selectedGenre, location.pathname]);
 
   const handleSearch = (query: string): void => {
     setSearchParams((prev) => {
@@ -176,7 +186,7 @@ const MovieListPage = () => {
               type="button"
               className="btn btn-primary"
               style={{ color: "var(--bs-secondary)" }}
-              onClick={() => handleOpenMovieDialog(MovieDialogType.ADD, null)}
+              onClick={() => navigate("/new")}
             >
               + Add Movie
             </button>
@@ -197,9 +207,7 @@ const MovieListPage = () => {
           <MoviesList
             movies={movies}
             onMovieClick={(movie) => navigate(`/${movie.id}`)}
-            onMovieEdit={(movie) =>
-              handleOpenMovieDialog(MovieDialogType.EDIT, movie)
-            }
+            onMovieEdit={(movie) => navigate(`/${movie.id}/edit`)}
             onMovieDelete={(movie) =>
               handleOpenMovieDialog(MovieDialogType.DELETE, movie)
             }
@@ -216,6 +224,7 @@ const MovieListPage = () => {
         onUpdateMovie={handleUpdateMovie}
         onDeleteMovie={handleConfirmDelete}
       />
+      <Outlet />
     </>
   );
 };

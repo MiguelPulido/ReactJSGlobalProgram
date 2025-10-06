@@ -4,7 +4,7 @@ import MovieForm, { type MovieFormData } from "../MovieForm";
 import type { Movie } from "../../../types/movie";
 
 const MOCK_MOVIE: Movie = {
-  id: "1",
+  id: 1,
   title: "Test Movie",
   poster_path: "https://example.com/test.jpg",
   runtime: 120,

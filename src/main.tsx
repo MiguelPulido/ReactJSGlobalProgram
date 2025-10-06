@@ -6,7 +6,9 @@ import "./index.css";
 import App from "./App.tsx";
 import MovieListPage from "./components/movieListPage/MovieListPage";
 import MovieDetailsPage from "./components/movieDetailsPage/MovieDetailsPage";
+import AddMovieDialog from "./components/AddMovieDialog/AddMovieDialog.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import EditMovieDialog from "./components/EditMovieDialog/EditMovieDialog.tsx";
 
 const ROUTER = createBrowserRouter([
   {
@@ -16,6 +18,16 @@ const ROUTER = createBrowserRouter([
       {
         path: "/",
         element: <MovieListPage />,
+        children: [
+          {
+            path: "new",
+            element: <AddMovieDialog />,
+          },
+          {
+            path: ":movieId/edit",
+            element: <EditMovieDialog />,
+          },
+        ],
       },
       {
         path: "/:movieId",

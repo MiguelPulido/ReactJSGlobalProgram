@@ -1,5 +1,5 @@
 export interface Movie {
-  id: string;
+  id: number;
   title: string;
   poster_path: string;
   runtime: number;
@@ -10,7 +10,7 @@ export interface Movie {
 };
 export const mapMovie = (apiMovie): Movie => {
   return {
-    id: String(apiMovie.id),
+    id: apiMovie.id,
     title: apiMovie.title,
     genres: apiMovie.genres ?? [],
     poster_path: apiMovie.poster_path,

@@ -4,7 +4,7 @@ import MovieTile from "../MovieTile";
 import type { Movie } from "../../../types/movie";
 
 const mockMovie: Movie = {
-  id: "1",
+  id: 1,
   title: "Test Movie",
   genres: ["Action", "Comedy"],
   poster_path: "https://example.com/poster.jpg",
@@ -15,7 +15,7 @@ const mockMovie: Movie = {
 };
 
 const mockMovieNoImageUrl: Movie = {
-  id: "1",
+  id: 1,
   title: "Test Movie With No Image",
   genres: ["Action", "Comedy"],
   poster_path: "",
